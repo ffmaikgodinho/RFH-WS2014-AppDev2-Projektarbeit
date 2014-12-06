@@ -1,4 +1,4 @@
 RFH-WS2014-AppDev2-Projektarbeit
 ================================
 
-siehe WIKI
+siehe https://github.com/ffmaikgodinho/RFH-WS2014-AppDev2-Projektarbeit/wiki
