@@ -15,32 +15,35 @@ public class SimpleCRMClient {
 
 	public static void main(String[] args) {
 //		try {
-			String choice = null;
-		AddressService addressService = (AddressService) Naming.lookup("rmi://localhost:1099/addressservice");
+		String choice = null;
+		while (choice != "5") {
+			//AddressService addressService = (AddressService) Naming.lookup("rmi://localhost:1099/addressservice");
 			//System.out.println("Client is running");
-			
-			BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-			System.out.println("Bitte wählen Sie eine Aktion aus:");
-			System.out.println("(1) Adresse eingeben");
-			System.out.println("(2) Adresse suchen");
-			System.out.println("(3) Adresse ändern");
-			System.out.println("(4) Adresse löschen");
-			
-			try {
-				choice = reader.readLine();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
+			choice = getInputValue("Bitte wählen Sie eine Aktion aus:\n"
+					+ "(1) Kontakt anlegen\n"
+					+ "(2) Kontakt suchen\n"
+					+ "(3) Kontakt ändern\n"
+					+ "(4) Kontakt löschen\n"
+					+ "(5) beenden");
 			
 			switch (choice) {
-			case "1" : Address address = new Address();
+			case "1" : //Contact contact = new Contact();
+					   //contact.firstname = 
+							   
 					   
-					   addressService.createAddress(address);
-			case "2" :
-			case "3" :
-			case "4" :
+					   //addressService.createContact(contact);
+						System.out.println("Adresse wurde eingegeben");
+						break;
+			case "2" :	System.out.println("Adresse wurde gefunden");
+						break;
+			case "3" :	System.out.println("Adresse wurde geändert");
+						break;
+			case "4" :	System.out.println("Adresse wurde gelöscht");
+						break;
+			case "5" :  return;
 			default: System.out.println("Eingabe ungültig");
+					// ToDo: Erzeuge Schleife für erneuten Eingabeversuch.
 					 break;
 	
 			}
@@ -54,5 +57,34 @@ public class SimpleCRMClient {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
+		}
+	}
+
+	/**
+	 * Erstellt ein Kontaktobjekt anhand der eingegebenen Werte.
+	 * @return Der Kontakt
+	 */
+	private Contact createContactFromInput() {
+		
+	}
+	
+	/**
+	 * Erzeugt eine Konsolenausgabe mit Aufforderung zur Eingabe.
+	 * @param question Die zu beantwortende Frage.
+	 * @return Den auf der Konsole eingegebenen Wert
+	 */
+	private static String getInputValue(String question) {
+		String input = null;
+		
+		System.out.println(question);
+		
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		try {
+			input = reader.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return input;
 	}
 }
