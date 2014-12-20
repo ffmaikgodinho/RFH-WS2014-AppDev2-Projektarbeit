@@ -6,8 +6,9 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 
-import de.rfh.crm.server.addressService.boundary.AddressService;
-import de.rfh.crm.server.addressService.control.AddressServiceImpl;
+import de.rfh.crm.server.contactService.boundary.ContactService;
+import de.rfh.crm.server.contactService.control.ContactServiceFactory;
+import de.rfh.crm.server.contactService.control.ContactServiceImpl;
 
 public class SimpleCRMServer {
 
@@ -17,11 +18,11 @@ public class SimpleCRMServer {
 	public static void main(String[] args) {
 		try {
 			LocateRegistry.createRegistry(1099);
-			AddressService adService = new AddressServiceImpl();
-			//BlaService bla = new BlaService();
+			ContactService contactService = ContactServiceFactory.getContactService();
 			
-			Naming.bind("rmi://localhost:1099/addressservice", adService);
-			//Naming.bind("rmi://localhost:1099/blaService", blaService);
+			Naming.bind("rmi://localhost:1099/crm/contactService", contactService);
+
+			System.out.println("Server is up and running");
 			
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
