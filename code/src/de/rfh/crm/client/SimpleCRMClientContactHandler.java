@@ -26,11 +26,12 @@ public class SimpleCRMClientContactHandler {
 						+ "(2) Kontakt suchen\n"
 						+ "(3) Kontakt ändern\n"
 						+ "(4) Kontakt löschen\n"
-						+ "(5) beenden");
+						+ "(0) zurück");
 				
 				switch (choice) {
+				case "0" :  return;
 				case "1" :  contactService.createContact(updateContact());
-							System.out.println("Adresse wurde eingegeben");
+							System.out.println("Adresse wurde gespeichert!");
 							break;
 				case "2" :	List<Contact> contacts = new ArrayList();
 							contacts = contactService.getContacts(SimpleCRMClientHelper.getInputValue("Bitte geben Sie einen Suchbegriff ein: "));
@@ -38,14 +39,14 @@ public class SimpleCRMClientContactHandler {
 							{
 								System.out.println(contact.getFirstName());
 							}
-							
-							System.out.println("Adresse wurde gefunden");
 							break;
-				case "3" :	System.out.println("Adresse wurde geändert");
+				case "3" :	Contact contact = contactService.getContact(UUID.fromString(SimpleCRMClientHelper.getInputValue("Bitte geben Sie die ID der Adresse ein, die Sie bearbeiten möchten: ")));
+							contactService.createContact(updateContact(contact));
+							System.out.println("Adresse wurde geändert!");
 							break;
-				case "4" :	System.out.println("Adresse wurde gelöscht");
+				case "4" :	contactService.deleteContact(UUID.fromString(SimpleCRMClientHelper.getInputValue("Bitte geben Sie die ID der Adresse ein, die Sie löschen möchten: ")));
+							System.out.println("Adresse wurde gelöscht!");
 							break;
-				case "5" :  return;
 				default: System.out.println("Eingabe ungültig");
 						 break;
 		
@@ -85,5 +86,4 @@ public class SimpleCRMClientContactHandler {
 		contact.setAddress(address);
 		return updateContact(contact);
 	}
-	
 }
