@@ -2,6 +2,7 @@ package de.rfh.crm.server.contactService.control;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
 import java.util.UUID;
 
 import de.rfh.crm.server.contactService.boundary.ContactService;
@@ -39,6 +40,12 @@ public class ContactServiceImpl extends UnicastRemoteObject implements ContactSe
 	public void updateContact(Contact contact) {
 		this.contactServvicePersistence.updateContact(contact);
 		
+	}
+	@Override
+	public List<Contact> getContacts(String searchCriteria)
+			throws RemoteException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
