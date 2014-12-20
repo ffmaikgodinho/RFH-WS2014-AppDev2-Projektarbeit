@@ -7,17 +7,19 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.UUID;
 
-import de.rfh.crm.server.addressService.boundary.AddressService;
-import de.rfh.crm.server.addressService.entity.Address;
+import de.rfh.crm.server.contactService.boundary.ContactService;
+import de.rfh.crm.server.contactService.entity.Address;
+import de.rfh.crm.server.contactService.entity.Contact;
 
 public class SimpleCRMClient {
 
 	public static void main(String[] args) {
-//		try {
 		String choice = null;
 		while (choice != "5") {
-			//AddressService addressService = (AddressService) Naming.lookup("rmi://localhost:1099/addressservice");
+			try {
+			ContactService contactService = (ContactService) Naming.lookup("rmi://localhost:1099/crm/contactService");
 			//System.out.println("Client is running");
 
 			choice = getInputValue("Bitte w‰hlen Sie eine Aktion aus:\n"
@@ -28,14 +30,13 @@ public class SimpleCRMClient {
 					+ "(5) beenden");
 			
 			switch (choice) {
-			case "1" : //Contact contact = new Contact();
-					   //contact.firstname = 
-							   
-					   
-					   //addressService.createContact(contact);
+			case "1" :  contactService.createContact(createContactFromInput());
 						System.out.println("Adresse wurde eingegeben");
 						break;
-			case "2" :	System.out.println("Adresse wurde gefunden");
+			case "2" :	Contact contact = new Contact();
+						contact = contactService.getContact(UUID.randomUUID());
+						System.out.println(contact.getFirstName());
+						System.out.println("Adresse wurde gefunden");
 						break;
 			case "3" :	System.out.println("Adresse wurde ge‰ndert");
 						break;
@@ -46,16 +47,16 @@ public class SimpleCRMClient {
 					 break;
 	
 			}
-//		} catch (MalformedURLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (RemoteException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (NotBoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NotBoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		}
 	}
 
@@ -63,15 +64,17 @@ public class SimpleCRMClient {
 	 * Erstellt ein Kontaktobjekt anhand der eingegebenen Werte.
 	 * @return Der Kontakt
 	 */
-	private Contact createContactFromInput() {
+	private static Contact createContactFromInput() {
 		Contact contact = new Contact();
-		contact.firstname = getInputValue("Bitte Vornamen eingeben: ");
-		contact.lastname = getInputValue("Bitte Nachnamen eingeben: ");
+		contact.setFirstName(getInputValue("Bitte Vornamen eingeben: "));
+		contact.setLastName(getInputValue("Bitte Nachnamen eingeben: "));
 		
 		Address address = new Address();
-		address.street = getInputValue("Bitte Straﬂe eingeben: ");
-		
-		contact.address = address;
+		address.setStreet(getInputValue("Bitte Straﬂe eingeben: "));
+		address.setZipcode(getInputValue("Bitte Postleitzahl eingeben: "));
+		address.setCity(getInputValue("Bitte Stadt eingeben: "));
+		address.setCountry(getInputValue("Bitte Land eingeben: "));
+		contact.setAddress(address);
 		
 		return contact;
 	}

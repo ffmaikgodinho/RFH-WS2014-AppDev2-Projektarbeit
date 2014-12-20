@@ -18,7 +18,7 @@ public class ContactServiceMock implements ContactServicePersistence {
 		ad.setCity("Köln");
 		ad.setCountry("Germany");
 		ad.setStreet("Musterstr. 1");
-		ad.setZipcode(50999);
+		ad.setZipcode("50999");
 		contact.setAddress(ad);
 		
 		return contact;

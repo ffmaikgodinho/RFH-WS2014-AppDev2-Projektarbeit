@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class Address implements Serializable {
 	String street;
-	int zipcode;
+	String zipcode;
 	String city;
 	String country;
 	
@@ -14,10 +14,10 @@ public class Address implements Serializable {
 	public void setStreet(String street) {
 		this.street = street;
 	}
-	public int getZipcode() {
+	public String getZipcode() {
 		return zipcode;
 	}
-	public void setZipcode(int zipcode) {
+	public void setZipcode(String zipcode) {
 		this.zipcode = zipcode;
 	}
 	public String getCity() {
