@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import de.rfh.crm.server.contactService.boundary.ContactService;
 import de.rfh.crm.server.contactService.boundary.ContactServicePersistence;
-import de.rfh.crm.server.contactService.entity.Address;
 import de.rfh.crm.server.contactService.entity.Contact;
 import de.rfh.crm.server.contactService.persistence.mock.ContactServiceMock;
 
@@ -18,7 +17,6 @@ public class ContactServiceImpl extends UnicastRemoteObject implements ContactSe
 	
 	public ContactServiceImpl() throws RemoteException {
 		super();
-		System.out.println("Initialized ContactSericeImpl");
 		this.contactServvicePersistence= new ContactServiceMock();
 	}
 	@Override
