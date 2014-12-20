@@ -43,7 +43,6 @@ public class SimpleCRMClient {
 						break;
 			case "5" :  return;
 			default: System.out.println("Eingabe ungültig");
-					// ToDo: Erzeuge Schleife für erneuten Eingabeversuch.
 					 break;
 	
 			}
@@ -65,7 +64,16 @@ public class SimpleCRMClient {
 	 * @return Der Kontakt
 	 */
 	private Contact createContactFromInput() {
+		Contact contact = new Contact();
+		contact.firstname = getInputValue("Bitte Vornamen eingeben: ");
+		contact.lastname = getInputValue("Bitte Nachnamen eingeben: ");
 		
+		Address address = new Address();
+		address.street = getInputValue("Bitte Straße eingeben: ");
+		
+		contact.address = address;
+		
+		return contact;
 	}
 	
 	/**
