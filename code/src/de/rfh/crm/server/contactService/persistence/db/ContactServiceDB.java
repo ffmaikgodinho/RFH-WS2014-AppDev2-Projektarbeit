@@ -43,6 +43,12 @@ public class ContactServiceDB implements ContactServicePersistence {
 	}
 
 	@Override
+	public ArrayList<Contact> getContacts(String searchCriteria) {
+		///TODO Refactor, string builder
+		return getContactByWhere("firstname LIKE '%" + searchCriteria + "%' OR lastname LIKE '%" + searchCriteria + "%' OR city LIKE '%" + searchCriteria + "%'");
+	}
+	
+	@Override
 	public void deleteContact(UUID id) {
 		// TODO Auto-generated method stub
 		
@@ -73,7 +79,7 @@ public class ContactServiceDB implements ContactServicePersistence {
 				contact = new Contact();
 				contact.setId(UUID.fromString(res.getString("UUID")));
 				contact.setFirstName(res.getString("FirstName"));
-				contact.setLastName(res.getString("LstName"));
+				contact.setLastName(res.getString("LastName"));
 				Address ad = new Address();
 				ad.setCity(res.getString("City"));
 				ad.setCountry(res.getString("Country"));

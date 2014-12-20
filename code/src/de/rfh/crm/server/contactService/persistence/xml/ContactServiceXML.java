@@ -1,5 +1,6 @@
 package de.rfh.crm.server.contactService.persistence.xml;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import de.rfh.crm.server.contactService.boundary.ContactServicePersistence;
@@ -29,6 +30,12 @@ public class ContactServiceXML implements ContactServicePersistence{
 	public void updateContact(Contact address) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public ArrayList<Contact> getContacts(String searchCriteria) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

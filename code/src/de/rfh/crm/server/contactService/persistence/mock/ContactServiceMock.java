@@ -1,5 +1,6 @@
 package de.rfh.crm.server.contactService.persistence.mock;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import de.rfh.crm.server.contactService.boundary.ContactServicePersistence;
@@ -36,6 +37,12 @@ public class ContactServiceMock implements ContactServicePersistence {
 
 	@Override
 	public void updateContact(Contact address) {
+	}
+
+	@Override
+	public ArrayList<Contact> getContacts(String searchCriteria) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

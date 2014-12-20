@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `contact` (
   `UUID` char(36) NOT NULL,
   `FirstName` varchar(100) NOT NULL,
   `LastName` varchar(100) NOT NULL,
-  `Stret` varchar(100) NOT NULL,
+  `Street` varchar(100) NOT NULL,
   `ZipCode` int(5) NOT NULL,
   `City` varchar(100) NOT NULL,
   `Country` varchar(100) NOT NULL

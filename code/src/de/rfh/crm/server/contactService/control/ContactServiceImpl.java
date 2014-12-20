@@ -26,6 +26,12 @@ public class ContactServiceImpl extends UnicastRemoteObject implements ContactSe
 		System.out.println("GetContact was called");
 		return this.contactServvicePersistence.getContact(id);
 	}
+	
+	@Override
+	public ArrayList<Contact> getContacts(String searchCriteria)
+			throws RemoteException {
+		return this.contactServvicePersistence.getContacts(searchCriteria);
+	}
 
 	@Override
 	public void deleteContact(UUID id) {
@@ -42,11 +48,4 @@ public class ContactServiceImpl extends UnicastRemoteObject implements ContactSe
 		this.contactServvicePersistence.updateContact(contact);
 		
 	}
-	@Override
-	public ArrayList<Contact> getContacts(String searchCriteria)
-			throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }
