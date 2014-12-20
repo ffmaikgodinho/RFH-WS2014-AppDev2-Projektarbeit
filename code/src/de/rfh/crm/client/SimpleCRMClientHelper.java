@@ -10,25 +10,6 @@ import de.rfh.crm.server.contactService.entity.Contact;
 public class SimpleCRMClientHelper {
 	
 	/**
-	 * Erstellt ein Kontaktobjekt anhand der eingegebenen Werte.
-	 * @return Der Kontakt
-	 */
-	public static Contact createContactFromInput() {
-		Contact contact = new Contact();
-		contact.setFirstName(getInputValue("Bitte Vornamen eingeben: "));
-		contact.setLastName(getInputValue("Bitte Nachnamen eingeben: "));
-		
-		Address address = new Address();
-		address.setStreet(getInputValue("Bitte Straﬂe eingeben: "));
-		address.setZipcode(getInputValue("Bitte Postleitzahl eingeben: "));
-		address.setCity(getInputValue("Bitte Stadt eingeben: "));
-		address.setCountry(getInputValue("Bitte Land eingeben: "));
-		contact.setAddress(address);
-		
-		return contact;
-	}
-	
-	/**
 	 * Erzeugt eine Konsolenausgabe mit Aufforderung zur Eingabe.
 	 * @param question Die zu beantwortende Frage.
 	 * @return Den auf der Konsole eingegebenen Wert

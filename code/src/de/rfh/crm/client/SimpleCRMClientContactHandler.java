@@ -4,9 +4,12 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import de.rfh.crm.server.contactService.boundary.ContactService;
+import de.rfh.crm.server.contactService.entity.Address;
 import de.rfh.crm.server.contactService.entity.Contact;
 
 public class SimpleCRMClientContactHandler {
@@ -26,12 +29,16 @@ public class SimpleCRMClientContactHandler {
 						+ "(5) beenden");
 				
 				switch (choice) {
-				case "1" :  contactService.createContact(SimpleCRMClientHelper.createContactFromInput());
+				case "1" :  contactService.createContact(updateContact());
 							System.out.println("Adresse wurde eingegeben");
 							break;
-				case "2" :	Contact contact = new Contact();
-							contact = contactService.getContact(UUID.randomUUID());
-							System.out.println(contact.getFirstName());
+				case "2" :	List<Contact> contacts = new ArrayList();
+							contacts = contactService.getContacts(SimpleCRMClientHelper.getInputValue("Bitte geben Sie einen Suchbegriff ein: "));
+							for(Contact contact : contacts)
+							{
+								System.out.println(contact.getFirstName());
+							}
+							
 							System.out.println("Adresse wurde gefunden");
 							break;
 				case "3" :	System.out.println("Adresse wurde ge‰ndert");
@@ -55,4 +62,28 @@ public class SimpleCRMClientContactHandler {
 			}
 		}
 	}
+	
+	/**
+	 * Erstellt ein Kontaktobjekt anhand der eingegebenen Werte.
+	 * @return Der Kontakt
+	 */
+	private static Contact updateContact(Contact contact) {
+		
+		contact.setFirstName(SimpleCRMClientHelper.getInputValue("Bitte Vornamen eingeben: "));
+		contact.setLastName(SimpleCRMClientHelper.getInputValue("Bitte Nachnamen eingeben: "));
+		Address address = contact.getAddress();
+		address.setStreet(SimpleCRMClientHelper.getInputValue("Bitte Straﬂe eingeben: "));
+		address.setZipcode(SimpleCRMClientHelper.getInputValue("Bitte Postleitzahl eingeben: "));
+		address.setCity(SimpleCRMClientHelper.getInputValue("Bitte Stadt eingeben: "));
+		address.setCountry(SimpleCRMClientHelper.getInputValue("Bitte Land eingeben: "));
+		return contact;
+	}
+	
+	private static Contact updateContact() {
+		Contact contact = new Contact();
+		Address address = new Address();
+		contact.setAddress(address);
+		return updateContact(contact);
+	}
+	
 }
