@@ -2,8 +2,8 @@ package de.rfh.crm.server.appointmentService.control;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 import de.rfh.crm.server.appointmentService.boundary.AppointmentService;
@@ -43,14 +43,14 @@ public class AppointmentServiceImpl extends UnicastRemoteObject implements Appoi
 	}
 
 	@Override
-	public List<Appointment> getAppointments(Date startDate, Date endDate)
+	public ArrayList<Appointment> getAppointments(Date startDate, Date endDate)
 			throws RemoteException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Appointment> getAppointments(Contact contact)
+	public ArrayList<Appointment> getAppointments(Contact contact)
 			throws RemoteException {
 		// TODO Auto-generated method stub
 		return null;

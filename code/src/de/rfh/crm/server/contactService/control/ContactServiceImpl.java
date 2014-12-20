@@ -2,12 +2,13 @@ package de.rfh.crm.server.contactService.control;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import de.rfh.crm.server.contactService.boundary.ContactService;
 import de.rfh.crm.server.contactService.boundary.ContactServicePersistence;
 import de.rfh.crm.server.contactService.entity.Contact;
+import de.rfh.crm.server.contactService.persistence.db.ContactServiceDB;
 import de.rfh.crm.server.contactService.persistence.mock.ContactServiceMock;
 
 public class ContactServiceImpl extends UnicastRemoteObject implements ContactService {
@@ -18,7 +19,7 @@ public class ContactServiceImpl extends UnicastRemoteObject implements ContactSe
 	
 	public ContactServiceImpl() throws RemoteException {
 		super();
-		this.contactServvicePersistence= new ContactServiceMock();
+		this.contactServvicePersistence = new ContactServiceDB();
 	}
 	@Override
 	public Contact getContact(UUID id) {
@@ -42,7 +43,7 @@ public class ContactServiceImpl extends UnicastRemoteObject implements ContactSe
 		
 	}
 	@Override
-	public List<Contact> getContacts(String searchCriteria)
+	public ArrayList<Contact> getContacts(String searchCriteria)
 			throws RemoteException {
 		// TODO Auto-generated method stub
 		return null;
