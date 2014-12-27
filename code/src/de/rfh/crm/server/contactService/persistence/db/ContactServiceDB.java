@@ -99,9 +99,27 @@ public class ContactServiceDB implements ContactServicePersistence {
 	}
 
 	@Override
-	public void updateContact(Contact address) {
-		// TODO Auto-generated method stub
+	public void updateContact(Contact contact) {
+		StringBuilder strSQL = new StringBuilder();
+		strSQL.append("UPDATE contact ");
+		strSQL.append("SET ");
+		strSQL.append("FirstName = '" + contact.getFirstName() + "',");
+		strSQL.append("LastName = '" + contact.getLastName() + "'");
+		if (contact.getAddress() != null)  {
+			strSQL.append(", ");
+			strSQL.append("Street = '" + contact.getAddress().getStreet() + "',");
+			strSQL.append("ZipCode = '" + contact.getAddress().getZipcode() + "',");
+			strSQL.append("City = '" + contact.getAddress().getCity() + "',");
+			strSQL.append("Country = '" + contact.getAddress().getCountry() + "'");
+		}
+		strSQL.append(" WHERE UUID = '" + contact.getId() + "'");
 		
+		try {
+			java.sql.CallableStatement pStat = connection.prepareCall(strSQL.toString());
+			Boolean blnResult = pStat.execute();	
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private ArrayList<Contact> getContactByWhere(String strWhere)  {

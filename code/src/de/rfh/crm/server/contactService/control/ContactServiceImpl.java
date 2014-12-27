@@ -35,11 +35,13 @@ public class ContactServiceImpl extends UnicastRemoteObject implements ContactSe
 
 	@Override
 	public void deleteContact(UUID id) {
+		//hier kann später noch geprüft werden ob der Kontakt überhaupt existiert.
 		this.contactServvicePersistence.deleteContact(id);
 	}
 
 	@Override
 	public void createContact(Contact contact) {
+		//hier kann später zum Beispiel noch ein Dublettencheck stattfinden
 		this.contactServvicePersistence.createContact(contact);
 	}
 
