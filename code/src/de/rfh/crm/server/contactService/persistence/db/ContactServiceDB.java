@@ -66,8 +66,35 @@ public class ContactServiceDB implements ContactServicePersistence {
 	}
 
 	@Override
-	public void createContact(Contact address) {
-		// TODO Auto-generated method stub
+	public void createContact(Contact contact) {
+		Address ad = contact.getAddress();
+		StringBuilder strSQL = new StringBuilder();
+		strSQL.append("Insert INTO contact ");
+		strSQL.append("(");
+		strSQL.append("UUID, ");
+		strSQL.append("FirstName, ");
+		strSQL.append("LastName, ");
+		strSQL.append("Street, ");
+		strSQL.append("ZipCode, ");
+		strSQL.append("City, ");
+		strSQL.append("Country");
+		strSQL.append(")");
+		strSQL.append("Values ");
+		strSQL.append("(");
+		strSQL.append("'" + contact.getId() + "',");
+		strSQL.append("'" + contact.getFirstName() + "',");
+		strSQL.append("'" + contact.getLastName() + "',");
+		strSQL.append("'" + (ad != null ? ad.getStreet() : "") + "',");
+		strSQL.append("'" + (ad != null ? ad.getZipcode() : "0") + "',");
+		strSQL.append("'" + (ad != null ? ad.getCity() : "") + "',");
+		strSQL.append("'" + (ad != null ? ad.getCountry() : "") + "'");
+		strSQL.append(")");
+		try {
+			java.sql.CallableStatement pStat = connection.prepareCall(strSQL.toString());
+			Boolean blnResult = pStat.execute();			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 	}
 
@@ -88,8 +115,7 @@ public class ContactServiceDB implements ContactServicePersistence {
 			PreparedStatement pStat = connection.prepareStatement(sql);
 			ResultSet res = pStat.executeQuery();
 			while(res.next()) {
-				contact = new Contact();
-				contact.setId(UUID.fromString(res.getString("UUID")));
+				contact = new Contact(UUID.fromString(res.getString("UUID")));
 				contact.setFirstName(res.getString("FirstName"));
 				contact.setLastName(res.getString("LastName"));
 				Address ad = new Address();

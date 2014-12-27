@@ -12,7 +12,6 @@ public class ContactServiceMock implements ContactServicePersistence {
 	@Override
 	public Contact getContact(UUID id) {
 		Contact contact = new Contact();
-		contact.setId(UUID.randomUUID());
 		contact.setFirstName("Maik");
 		contact.setLastName("Godinho");
 		Address ad = new Address();

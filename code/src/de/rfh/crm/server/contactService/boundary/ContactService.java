@@ -11,6 +11,6 @@ public interface ContactService extends Remote {
 	Contact getContact(UUID id) throws RemoteException;
 	ArrayList<Contact> getContacts(String searchCriteria) throws RemoteException;
 	void deleteContact(UUID id) throws RemoteException;
-	void createContact(Contact address) throws RemoteException;
-	void updateContact(Contact address) throws RemoteException;
+	void createContact(Contact contact) throws RemoteException;
+	void updateContact(Contact contact) throws RemoteException;
 }

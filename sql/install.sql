@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `contact` (
   `FirstName` varchar(100) NOT NULL,
   `LastName` varchar(100) NOT NULL,
   `Street` varchar(100) NOT NULL,
-  `ZipCode` int(5) NOT NULL,
+  `ZipCode` varchar(10) NOT NULL,
   `City` varchar(100) NOT NULL,
   `Country` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

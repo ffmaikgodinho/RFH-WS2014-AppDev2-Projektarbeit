@@ -3,10 +3,10 @@ package de.rfh.crm.server.contactService.entity;
 import java.io.Serializable;
 
 public class Address implements Serializable {
-	String street;
-	String zipcode;
-	String city;
-	String country;
+	String street = "";
+	String zipcode = "0";
+	String city = "";
+	String country = "";
 	
 	public String getStreet() {
 		return street;

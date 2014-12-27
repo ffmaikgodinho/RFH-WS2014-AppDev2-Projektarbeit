@@ -9,6 +9,6 @@ public interface ContactServicePersistence {
 	Contact getContact(UUID id);
 	ArrayList<Contact> getContacts(String searchCriteria);
 	void deleteContact(UUID id);
-	void createContact(Contact address);
-	void updateContact(Contact address);
+	void createContact(Contact contact);
+	void updateContact(Contact contact);
 }

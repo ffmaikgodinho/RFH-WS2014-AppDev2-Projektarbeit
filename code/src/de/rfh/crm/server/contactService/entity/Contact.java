@@ -6,18 +6,23 @@ import java.util.UUID;
 public class Contact implements Serializable {
 	UUID id;
 	Address address;
-	String firstName;
-	String lastName;
+	String firstName = "";
+	String lastName = "";
 	
 	@Override
 	public String toString()  {
 		return this.firstName + " " + this.lastName;
 	}
-	
+	public Contact()  {
+		setId(UUID.randomUUID());
+	}
+	public Contact(UUID id)  {
+		setId(id);
+	}
 	public UUID getId() {
 		return id;
 	}
-	public void setId(UUID id) {
+	private void setId(UUID id) {
 		this.id = id;
 	}
 	public Address getAddress() {
