@@ -7,12 +7,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import com.mysql.jdbc.CallableStatement;
+
 import de.rfh.crm.server.connectionManager.ConnectionFactory;
 import de.rfh.crm.server.connectionManager.boundary.DefaultConnection;
 import de.rfh.crm.server.contactService.boundary.ContactServicePersistence;
 import de.rfh.crm.server.contactService.entity.Address;
 import de.rfh.crm.server.contactService.entity.Contact;
-import de.rfh.crm.server.contactService.persistence.util.ConnectionException;
 
 public class ContactServiceDB implements ContactServicePersistence {
 	
@@ -30,7 +31,7 @@ public class ContactServiceDB implements ContactServicePersistence {
 
 	@Override
 	public Contact getContact(UUID id) {
-		ArrayList<Contact> contacts = getContactByWhere("UUID = ''");
+		ArrayList<Contact> contacts = getContactByWhere("UUID = '" + id.toString() + "'");
 		if (contacts.size() == 0)  {
 			return null;
 		}
@@ -50,7 +51,17 @@ public class ContactServiceDB implements ContactServicePersistence {
 	
 	@Override
 	public void deleteContact(UUID id) {
-		// TODO Auto-generated method stub
+		try {
+			String sql = "DELETE FROM contact WHERE UUID='" + id + "'";
+			java.sql.CallableStatement pStat = connection.prepareCall(sql);
+			Boolean blnResult = pStat.execute();
+			if (!blnResult)  {
+				//weg loggen und exception werfen
+			}
+		} catch (SQLException e) {
+			//weg loggen und exception werfen
+			e.printStackTrace();
+		}
 		
 	}
 
@@ -65,6 +76,7 @@ public class ContactServiceDB implements ContactServicePersistence {
 		// TODO Auto-generated method stub
 		
 	}
+
 	private ArrayList<Contact> getContactByWhere(String strWhere)  {
 		if (strWhere == "") {
 			strWhere = "1=1";	//damit es nicht zu SQL Fehlern kommt.

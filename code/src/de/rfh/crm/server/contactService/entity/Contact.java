@@ -9,6 +9,11 @@ public class Contact implements Serializable {
 	String firstName;
 	String lastName;
 	
+	@Override
+	public String toString()  {
+		return this.firstName + " " + this.lastName;
+	}
+	
 	public UUID getId() {
 		return id;
 	}
