@@ -12,14 +12,26 @@ import de.rfh.crm.server.appointmentService.entity.Appointment;
 import de.rfh.crm.server.contactService.entity.Contact;
 
 public class SimpleCRMClientAppointmentHandler extends Observer {
-
-	/**
-	 * Registriert diese Klasse als Observer
-	 * @param handler 
-	 */
-	public SimpleCRMClientAppointmentHandler(SimpleCRMClientBroker handler) {
-		this.handler = handler;
-		this.handler.attach(this);
+	private int id;
+	private SimpleCRMClientBroker broker;
+	AppointmentService appointmentService = null;
+	
+	public SimpleCRMClientAppointmentHandler(int id, SimpleCRMClientBroker broker){
+		this.id = id;
+		this.broker = broker;
+		
+		try {
+			appointmentService = (AppointmentService) Naming.lookup("rmi://localhost:1099/crm/appointmentService");
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NotBoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -28,9 +40,7 @@ public class SimpleCRMClientAppointmentHandler extends Observer {
 //	public void displayAppointmentMenu() {
 //		String choice = null;
 //		while (choice != "0") {
-//			try {
-//				AppointmentService appointmentService = (AppointmentService) Naming.lookup("rmi://localhost:1099/crm/appointmentService");
-//	
+	
 //				choice = SimpleCRMClientHelper.getInputValue("Bitte wählen Sie eine Aktion aus:\n"
 //						+ "(1) Termin erstellen\n"
 //						+ "(2) Termin in einem Zeitraum ausgeben\n"
@@ -56,16 +66,6 @@ public class SimpleCRMClientAppointmentHandler extends Observer {
 //						 break;
 //		
 //				}
-//			} catch (MalformedURLException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			} catch (RemoteException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			} catch (NotBoundException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
 //		}
 //	}
 
@@ -97,6 +97,6 @@ public class SimpleCRMClientAppointmentHandler extends Observer {
 
 	@Override
 	public void update() {
-	      System.out.println("Appointment Handler registered."); 
+	      System.out.println("Actions updateAppointment() verfügbar."); 
 	}
 }
