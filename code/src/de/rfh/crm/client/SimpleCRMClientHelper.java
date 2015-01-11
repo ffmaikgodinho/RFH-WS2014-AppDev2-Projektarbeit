@@ -3,6 +3,10 @@ package de.rfh.crm.client;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import de.rfh.crm.server.contactService.entity.Address;
 import de.rfh.crm.server.contactService.entity.Contact;
@@ -27,5 +31,24 @@ public class SimpleCRMClientHelper {
 		}
 		
 		return input;
+	}
+
+	/**
+	 * Wandelt ein String-Objekt in ein Date-Objekt um.
+	 * @param input Der umzuwandelnde String
+	 * @param format Das Format des umzuwandelnden Strings
+	 * @return Das geparste Datum
+	 */
+	public static Date getDateByString(String input, String format) {
+		DateFormat df = new SimpleDateFormat(format);
+		Date from = null;
+		
+		try {
+			from = df.parse(input);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return from;
 	}
 }

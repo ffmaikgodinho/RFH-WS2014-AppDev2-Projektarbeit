@@ -1,14 +1,7 @@
 package de.rfh.crm.client;
 
 public class SimpleCRMClient {
-
 	public static void main(String[] args) {
-		
-		// Observer und Broker erstellen
-		// Anmeldung des Observers beim Broker erfolgt erst im Bedarfsfall.
-		SimpleCRMClientBroker broker = new SimpleCRMClientBroker();
-		SimpleCRMClientAppointmentHandler appointmentActions = new SimpleCRMClientAppointmentHandler(1, broker);
-
 		String category = null;
 		
 		while (category != "0") {
@@ -20,9 +13,10 @@ public class SimpleCRMClient {
 			switch (category) {
 				case "0": return;
 				case "1": SimpleCRMClientContactHandler contactHandler = new SimpleCRMClientContactHandler();
+						  contactHandler.displayContactMenu();
 						  break;
-				case "2": broker.attach(appointmentActions);
-					      broker.notify(appointmentActions);
+				case "2": SimpleCRMClientAppointmentHandler appointmentHandler = new SimpleCRMClientAppointmentHandler();
+						  appointmentHandler.displayAppointmentMenu();
 						  break;
 				default:  System.out.println("Ungültige Eingabe!"); 
 						  break;
