@@ -9,7 +9,6 @@ import java.util.UUID;
 import de.rfh.crm.server.appointmentService.boundary.AppointmentService;
 import de.rfh.crm.server.appointmentService.boundary.AppointmentServicePersistence;
 import de.rfh.crm.server.appointmentService.entity.Appointment;
-import de.rfh.crm.server.appointmentService.persistence.mock.AppointmentServiceMock;
 import de.rfh.crm.server.appointmentService.persistence.xml.AppointmentServiceXML;
 import de.rfh.crm.server.contactService.entity.Contact;
 

@@ -124,11 +124,6 @@ public class AppointmentServiceXML implements AppointmentServicePersistence {
 		return node.getNodeValue();
 	}
 	
-	private static void setElementValue(String tagName, String value)
-	{
-		
-	}
-
 	/**
 	 * This method reads a xml file into a Document object.
 	 * @return the parsed xml file

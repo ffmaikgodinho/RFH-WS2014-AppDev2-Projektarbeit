@@ -89,7 +89,7 @@ public class ContactServiceDB implements ContactServicePersistence {
 		strSQL.append(")");
 		try {
 			java.sql.CallableStatement pStat = connection.prepareCall(strSQL.toString());
-			Boolean blnResult = pStat.execute();			
+			pStat.execute();			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -114,7 +114,7 @@ public class ContactServiceDB implements ContactServicePersistence {
 		
 		try {
 			java.sql.CallableStatement pStat = connection.prepareCall(strSQL.toString());
-			Boolean blnResult = pStat.execute();	
+			pStat.execute();	
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
