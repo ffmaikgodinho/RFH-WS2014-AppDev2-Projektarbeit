@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import de.rfh.crm.server.appointmentService.boundary.AppointmentService;
 import de.rfh.crm.server.appointmentService.entity.Appointment;
+import de.rfh.crm.server.contactService.entity.Address;
 import de.rfh.crm.server.contactService.entity.Contact;
 
 public class ObserverAppointmentImpl extends Observer {
@@ -184,6 +185,9 @@ public class ObserverAppointmentImpl extends Observer {
 	private Appointment updateAppointment(){
 		Appointment app = new Appointment();
 		Contact contact = new Contact();
+		Address address = new Address();
+		
+		contact.setAddress(address);
 		app.setContact(contact);
 		
 		return updateAppointment(app);
