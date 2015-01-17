@@ -10,6 +10,7 @@ import de.rfh.crm.server.appointmentService.boundary.AppointmentService;
 import de.rfh.crm.server.appointmentService.boundary.AppointmentServicePersistence;
 import de.rfh.crm.server.appointmentService.entity.Appointment;
 import de.rfh.crm.server.appointmentService.persistence.mock.AppointmentServiceMock;
+import de.rfh.crm.server.appointmentService.persistence.xml.AppointmentServiceXML;
 import de.rfh.crm.server.contactService.entity.Contact;
 
 public class AppointmentServiceImpl extends UnicastRemoteObject implements AppointmentService {
@@ -18,7 +19,7 @@ public class AppointmentServiceImpl extends UnicastRemoteObject implements Appoi
 	
 	protected AppointmentServiceImpl() throws RemoteException {
 		super();
-		this.appointmentServicePersistence = new AppointmentServiceMock();
+		this.appointmentServicePersistence = new AppointmentServiceXML();
 	}
 
 	@Override

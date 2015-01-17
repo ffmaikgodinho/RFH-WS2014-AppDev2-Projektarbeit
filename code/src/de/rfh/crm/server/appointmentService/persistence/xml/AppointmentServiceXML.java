@@ -8,6 +8,9 @@ import java.text.SimpleDateFormat;
 import java.util.UUID;
 
 import javax.xml.parsers.*;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -25,7 +28,7 @@ import de.rfh.crm.server.appointmentService.entity.Appointment;
 public class AppointmentServiceXML implements AppointmentServicePersistence {
 	
 	/**
-	 * Path to local xml file
+	 * Path to local xml file. ToDo: May be stored in a configuration file.
 	 */
 	private File file = new File("C:\\Users\\windo_000\\workspace\\RFH-WS2014-AppDev2-Projektarbeit\\code\\data\\appointments.xml");
 	
@@ -52,15 +55,29 @@ public class AppointmentServiceXML implements AppointmentServicePersistence {
 	}
 
 	@Override
+	/**
+	 * Entfernt den Node des XML-Dokuments mit der übergebenen ID.
+	 */
 	public void deleteAppointment(UUID id) {
-		// TODO Auto-generated method stub
+		Document document = readFile();
+		Element result = findElementWithUuid(id, document);
 		
+		document.removeChild(result);
+		saveFile(document);
 	}
 
 	@Override
 	public void createAppointment(Appointment appointment) {
-		// TODO Auto-generated method stub
+		Document document = readFile();
+		Element newAppointment = document.createElement("appointment");
 		
+		Node subject = document.createElement("subject");
+		subject.setNodeValue(appointment.getSubject());
+		// or subject.appendChild(document.createTextNode(appointment.getSubject()));
+		newAppointment.appendChild(subject);
+		
+		document.appendChild(newAppointment);
+		saveFile(document);
 	}
 
 	@Override
@@ -105,7 +122,12 @@ public class AppointmentServiceXML implements AppointmentServicePersistence {
 		NodeList nodes = element.getElementsByTagName(tagName).item(0).getChildNodes();
 		Node node = (Node) nodes.item(0);
 		return node.getNodeValue();
-		}
+	}
+	
+	private static void setElementValue(String tagName, String value)
+	{
+		
+	}
 
 	/**
 	 * This method reads a xml file into a Document object.
@@ -132,4 +154,27 @@ public class AppointmentServiceXML implements AppointmentServicePersistence {
 		return document;
 	}
 
+	/**
+	 * This method saves a DOM Object in a xml file.
+	 * @param document
+	 */
+	private void saveFile(Document document) {
+	    TransformerFactory xformFactory  = TransformerFactory.newInstance();
+	     Transformer idTransform = null;
+	      
+		try {
+			idTransform = xformFactory.newTransformer();
+		} catch (TransformerConfigurationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	      Source input = new DOMSource(document);
+	      Result output = new StreamResult(file);
+	      try {
+			idTransform.transform(input, output);
+		} catch (TransformerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }
