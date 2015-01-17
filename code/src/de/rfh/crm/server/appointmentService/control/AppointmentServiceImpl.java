@@ -14,6 +14,8 @@ import de.rfh.crm.server.contactService.entity.Contact;
 
 public class AppointmentServiceImpl extends UnicastRemoteObject implements AppointmentService {
 
+	private static final long serialVersionUID = 8234758923562209314L;
+
 	private AppointmentServicePersistence appointmentServicePersistence;
 	
 	protected AppointmentServiceImpl() throws RemoteException {

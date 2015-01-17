@@ -9,7 +9,6 @@ import de.rfh.crm.server.contactService.boundary.ContactService;
 import de.rfh.crm.server.contactService.boundary.ContactServicePersistence;
 import de.rfh.crm.server.contactService.entity.Contact;
 import de.rfh.crm.server.contactService.persistence.db.ContactServiceDB;
-import de.rfh.crm.server.contactService.persistence.mock.ContactServiceMock;
 
 public class ContactServiceImpl extends UnicastRemoteObject implements ContactService {
 

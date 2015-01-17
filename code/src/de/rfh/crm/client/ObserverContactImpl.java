@@ -5,7 +5,6 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 import de.rfh.crm.server.contactService.boundary.ContactService;
@@ -33,7 +32,7 @@ public class ObserverContactImpl extends Observer {
 				case "1" :  contactService.createContact(updateContact());
 							System.out.println("Adresse wurde gespeichert!");
 							break;
-				case "2" :	List<Contact> contacts = new ArrayList();
+				case "2" :	ArrayList<Contact> contacts = new ArrayList<Contact>();
 							contacts = contactService.getContacts(ClientHelper.getInputValue("Bitte geben Sie einen Suchbegriff ein: "));
 							for(Contact contact : contacts)
 							{

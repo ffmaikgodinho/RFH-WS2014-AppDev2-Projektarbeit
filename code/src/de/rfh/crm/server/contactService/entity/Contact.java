@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.UUID;
 
 public class Contact implements Serializable {
+
+	private static final long serialVersionUID = -6404387813921025506L;
+	
 	UUID id;
 	Address address;
 	String firstName = "";
