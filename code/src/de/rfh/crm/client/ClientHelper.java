@@ -11,7 +11,7 @@ import java.util.Date;
 import de.rfh.crm.server.contactService.entity.Address;
 import de.rfh.crm.server.contactService.entity.Contact;
 
-public class SimpleCRMClientHelper {
+public class ClientHelper {
 	
 	/**
 	 * Erzeugt eine Konsolenausgabe mit Aufforderung zur Eingabe.
@@ -50,5 +50,15 @@ public class SimpleCRMClientHelper {
 			e.printStackTrace();
 		}
 		return from;
+	}
+	
+	public static boolean isInteger(String s) {
+	    try { 
+	        Integer.parseInt(s); 
+	    } catch(NumberFormatException e) { 
+	        return false; 
+	    }
+	    // only got here if we didn't return false
+	    return true;
 	}
 }
