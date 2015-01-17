@@ -12,7 +12,7 @@ import de.rfh.crm.server.appointmentService.boundary.AppointmentService;
 import de.rfh.crm.server.appointmentService.entity.Appointment;
 import de.rfh.crm.server.contactService.entity.Contact;
 
-public class SimpleCRMClientAppointmentHandler {
+public class ObserverAppointmentImpl extends Observer {
 
 	// Doesn't singleton makes sense?
 	private static AppointmentService appointmentService;
@@ -20,7 +20,7 @@ public class SimpleCRMClientAppointmentHandler {
 	/**
 	 * Konstruktor initialisiert die Verbindung zum RMI Server.
 	 */
-	public SimpleCRMClientAppointmentHandler() {
+	public ObserverAppointmentImpl() {
 		try {
 			appointmentService = (AppointmentService) Naming.lookup("rmi://localhost:1099/crm/appointmentService");
 		} catch (MalformedURLException | RemoteException | NotBoundException e) {
@@ -36,7 +36,7 @@ public class SimpleCRMClientAppointmentHandler {
 		String choice = null;
 		while (choice != "0") {
 
-			choice = SimpleCRMClientHelper.getInputValue("Bitte wählen Sie eine Aktion aus:\n"
+			choice = ClientHelper.getInputValue("Bitte wählen Sie eine Aktion aus:\n"
 						+ "(1) Termin erstellen\n"
 						+ "(2) Termin in einem Zeitraum ausgeben\n"
 						+ "(3) Termin für Kontakt ausgeben\n"
@@ -81,10 +81,10 @@ public class SimpleCRMClientAppointmentHandler {
 	 */
 	private void getAppointmentsByDate() throws RemoteException {
 		// Define DateRange
-		String fromAsString = SimpleCRMClientHelper.getInputValue("Bitte geben Sie den Anfangszeitpunkt an (yyyy-mm-dd): ");
-		Date from = SimpleCRMClientHelper.getDateByString(fromAsString, "yyyy-mm-dd");
-		String toAsString = SimpleCRMClientHelper.getInputValue("Bitte geben Sie den Endzeitpunkt an (yyyy-mm-dd): ");
-		Date to = SimpleCRMClientHelper.getDateByString(toAsString, "yyyy-mm-dd");
+		String fromAsString = ClientHelper.getInputValue("Bitte geben Sie den Anfangszeitpunkt an (yyyy-mm-dd): ");
+		Date from = ClientHelper.getDateByString(fromAsString, "yyyy-mm-dd");
+		String toAsString = ClientHelper.getInputValue("Bitte geben Sie den Endzeitpunkt an (yyyy-mm-dd): ");
+		Date to = ClientHelper.getDateByString(toAsString, "yyyy-mm-dd");
 
 		// Get Appointments
 		ArrayList<Appointment> apps = appointmentService.getAppointments(from, to);
@@ -101,12 +101,12 @@ public class SimpleCRMClientAppointmentHandler {
 	private void getAppointmentsByContact() throws RemoteException {
 		// Define Contact
 		Contact contact = new Contact();
-		contact.setFirstName(SimpleCRMClientHelper.getInputValue("Bitte geben Sie den Vornamen an: "));
-		contact.setFirstName(SimpleCRMClientHelper.getInputValue("Bitte geben Sie den Nachnamen an: "));
-		contact.getAddress().setStreet(SimpleCRMClientHelper.getInputValue("Bitte geben Sie die Straße an: "));
-		contact.getAddress().setZipcode(SimpleCRMClientHelper.getInputValue("Bitte geben Sie die PLZ an: "));
-		contact.getAddress().setCity(SimpleCRMClientHelper.getInputValue("Bitte geben Sie die Stadt an: "));
-		contact.getAddress().setCountry(SimpleCRMClientHelper.getInputValue("Bitte geben Sie das Land an: "));
+		contact.setFirstName(ClientHelper.getInputValue("Bitte geben Sie den Vornamen an: "));
+		contact.setFirstName(ClientHelper.getInputValue("Bitte geben Sie den Nachnamen an: "));
+		contact.getAddress().setStreet(ClientHelper.getInputValue("Bitte geben Sie die Straße an: "));
+		contact.getAddress().setZipcode(ClientHelper.getInputValue("Bitte geben Sie die PLZ an: "));
+		contact.getAddress().setCity(ClientHelper.getInputValue("Bitte geben Sie die Stadt an: "));
+		contact.getAddress().setCountry(ClientHelper.getInputValue("Bitte geben Sie das Land an: "));
 		
 		// Get Appointments
 		ArrayList<Appointment> apps = appointmentService.getAppointments(contact);
@@ -120,12 +120,12 @@ public class SimpleCRMClientAppointmentHandler {
 	 * @throws RemoteException
 	 */
 	private void deleteAppointment() throws RemoteException {
-		String input = SimpleCRMClientHelper.getInputValue("Bitte geben Sie die ID an: ");
+		String input = ClientHelper.getInputValue("Bitte geben Sie die ID an: ");
 		UUID id = UUID.fromString(input);
 		
 		Appointment app = appointmentService.getAppointment(id);
 		
-		String confirm = SimpleCRMClientHelper.getInputValue("Sind Sie sicher, dass Sie folgenden Termin löschen möchten? (Y/N)) "
+		String confirm = ClientHelper.getInputValue("Sind Sie sicher, dass Sie folgenden Termin löschen möchten? (Y/N)) "
 				+ app.getSubject());
 		
 		if (confirm.equalsIgnoreCase("Y")) {
@@ -162,16 +162,16 @@ public class SimpleCRMClientAppointmentHandler {
 	 */
 	private Appointment updateAppointment(Appointment app) {
 		app.setId(UUID.randomUUID());
-		app.setStartDate(SimpleCRMClientHelper.getDateByString(SimpleCRMClientHelper.getInputValue("Bitte geben Sie das Anfangsdatum ein (yyyy-mm-dd):"), "yyyy-mm-dd"));
-		app.setEndDate(SimpleCRMClientHelper.getDateByString(SimpleCRMClientHelper.getInputValue("Bitte geben Sie das Enddatum ein (yyyy-mm-dd):"), "yyyy-mm-dd"));
-		app.setSubject(SimpleCRMClientHelper.getInputValue("Bitte geben Sie das Thema ein:"));
+		app.setStartDate(ClientHelper.getDateByString(ClientHelper.getInputValue("Bitte geben Sie das Anfangsdatum ein (yyyy-mm-dd):"), "yyyy-mm-dd"));
+		app.setEndDate(ClientHelper.getDateByString(ClientHelper.getInputValue("Bitte geben Sie das Enddatum ein (yyyy-mm-dd):"), "yyyy-mm-dd"));
+		app.setSubject(ClientHelper.getInputValue("Bitte geben Sie das Thema ein:"));
 
-		app.getContact().setFirstName(SimpleCRMClientHelper.getInputValue("Bitte geben Sie den Vornamen ein:"));
-		app.getContact().setLastName(SimpleCRMClientHelper.getInputValue("Bitte geben Sie den Nachnamen ein:"));
-		app.getContact().getAddress().setStreet(SimpleCRMClientHelper.getInputValue("Bitte geben Sie die Straße ein:"));
-		app.getContact().getAddress().setZipcode(SimpleCRMClientHelper.getInputValue("Bitte geben Sie die PLZ ein:"));
-		app.getContact().getAddress().setCity(SimpleCRMClientHelper.getInputValue("Bitte geben Sie die Stadt ein:"));
-		app.getContact().getAddress().setCountry(SimpleCRMClientHelper.getInputValue("Bitte geben Sie das Land ein:"));
+		app.getContact().setFirstName(ClientHelper.getInputValue("Bitte geben Sie den Vornamen ein:"));
+		app.getContact().setLastName(ClientHelper.getInputValue("Bitte geben Sie den Nachnamen ein:"));
+		app.getContact().getAddress().setStreet(ClientHelper.getInputValue("Bitte geben Sie die Straße ein:"));
+		app.getContact().getAddress().setZipcode(ClientHelper.getInputValue("Bitte geben Sie die PLZ ein:"));
+		app.getContact().getAddress().setCity(ClientHelper.getInputValue("Bitte geben Sie die Stadt ein:"));
+		app.getContact().getAddress().setCountry(ClientHelper.getInputValue("Bitte geben Sie das Land ein:"));
 		
 		return app;
 	}
@@ -187,5 +187,20 @@ public class SimpleCRMClientAppointmentHandler {
 		app.setContact(contact);
 		
 		return updateAppointment(app);
+	}
+
+	@Override
+	public void update() {
+		this.displayAppointmentMenu();
+	}
+
+	@Override
+	public String toString() {
+		return "Terminverwaltung";
+	}
+
+	@Override
+	public void consoleOutMainMenu() {
+		System.out.println(this.getId() + " - " + this.toString());
 	}
 }

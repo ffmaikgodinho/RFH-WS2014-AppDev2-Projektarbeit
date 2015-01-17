@@ -7,6 +7,9 @@ import java.util.UUID;
 import de.rfh.crm.server.contactService.entity.Contact;
 
 public class Appointment implements Serializable{
+
+	private static final long serialVersionUID = 2099105042813356755L;
+	
 	UUID id;
 	Contact contact;
 	Date startDate;

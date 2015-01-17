@@ -7,8 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import com.mysql.jdbc.CallableStatement;
-
 import de.rfh.crm.server.connectionManager.ConnectionFactory;
 import de.rfh.crm.server.connectionManager.boundary.DefaultConnection;
 import de.rfh.crm.server.contactService.boundary.ContactServicePersistence;

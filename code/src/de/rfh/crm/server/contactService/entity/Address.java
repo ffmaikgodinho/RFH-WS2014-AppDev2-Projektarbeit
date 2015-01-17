@@ -3,6 +3,9 @@ package de.rfh.crm.server.contactService.entity;
 import java.io.Serializable;
 
 public class Address implements Serializable {
+
+	private static final long serialVersionUID = -6692624812275116288L;
+	
 	String street = "";
 	String zipcode = "0";
 	String city = "";
