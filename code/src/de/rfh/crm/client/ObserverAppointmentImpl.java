@@ -39,23 +39,21 @@ public class ObserverAppointmentImpl extends Observer {
 
 			choice = ClientHelper.getInputValue("Bitte wählen Sie eine Aktion aus:\n"
 						+ "(1) Termin erstellen\n"
-						+ "(2) Termin in einem Zeitraum ausgeben\n"
-						+ "(3) Termin für Kontakt ausgeben\n"
-						+ "(4) Termin löschen\n"
-						+ "(5) ?Adresse und Termin verbinden\n"
-						+ "(6) ?Adresse von Termin lösen\n"
-						+ "(7) ?Adresse von Termin anzeigen\n"
+						+ "(2) Termin für ID ausgeben\n"
+						+ "(3) Termin in einem Zeitraum ausgeben\n"
+						+ "(4) Termin für Kontakt ausgeben\n"
+						+ "(5) Termin aktualisieren\n"
+						+ "(6) Termin löschen\n"
 						+ "(0) zurück zum Hauptmenü");
 			try {
 				switch (choice) {
 				case "0" :  return;
 				case "1" :  createAppointment(); break;
-				case "2" :	getAppointmentsByDate(); break;
-				case "3" :	getAppointmentsByContact(); break;
-				case "4" :	deleteAppointment(); break;
-				case "5" :	break;
-				case "6" :	break;
-				case "7" :	break;
+				case "2" :  getAppointmentById(); break;
+				case "3" :	getAppointmentsByDate(); break;
+				case "4" :	getAppointmentsByContact(); break;
+				case "5" :  updateAppointment(); break;
+				case "6" :	deleteAppointment(); break;
 				default: System.out.println("Eingabe ungültig");
 						 break;
 				}
@@ -66,12 +64,38 @@ public class ObserverAppointmentImpl extends Observer {
 		}
 	}
 
+	/** 
+	 * Gibt die Daten eines Termins aus.
+	 * @throws RemoteException
+	 */
+	private void getAppointmentById() throws RemoteException {
+		String input = ClientHelper.getInputValue("Bitte geben Sie die ID an: ");
+		UUID id = UUID.fromString(input);
+		
+		Appointment app = appointmentService.getAppointment(id);
+		
+		System.out.println("-------");
+		System.out.println("Betreff:\t " + app.getSubject());
+		System.out.println("Von:\t " + app.getStartDate());
+		System.out.println("Bis:\t " + app.getEndDate());
+	}
+	
+
 	/**
-	 * Erstellt einen neuen Termin
+	 * Diese Methode erzeugt einen leeren Termin und ruft 
+	 * anschließend updateAppointment(Appointment) auf.
 	 * @throws RemoteException
 	 */
 	private void createAppointment() throws RemoteException {
-		appointmentService.createAppointment(updateAppointment());
+		Appointment app = new Appointment();
+		Contact contact = new Contact();
+		Address address = new Address();
+		
+		contact.setAddress(address);
+		app.setContact(contact);
+		app.setId(UUID.randomUUID());
+		
+		appointmentService.createAppointment(updateAppointment(app));
 		System.out.println("Termin erfolgreich erstellt.");
 	}
 	
@@ -162,7 +186,7 @@ public class ObserverAppointmentImpl extends Observer {
 	 * @return Die vollständige Adresse
 	 */
 	private Appointment updateAppointment(Appointment app) {
-		app.setId(UUID.randomUUID());
+		// id bleibt identisch!
 		app.setStartDate(ClientHelper.getDateByString(ClientHelper.getInputValue("Bitte geben Sie das Anfangsdatum ein (yyyy-mm-dd):"), "yyyy-mm-dd"));
 		app.setEndDate(ClientHelper.getDateByString(ClientHelper.getInputValue("Bitte geben Sie das Enddatum ein (yyyy-mm-dd):"), "yyyy-mm-dd"));
 		app.setSubject(ClientHelper.getInputValue("Bitte geben Sie das Thema ein:"));
@@ -178,19 +202,18 @@ public class ObserverAppointmentImpl extends Observer {
 	}
 	
 	/**
-	 * Diese Methode erzeugt einen leeren Termin und ruft 
-	 * anschließend updateAppointment(Appointment) auf.
+	 * Diese Methode speichert die bisherigen Eigenschaften und fragt anschließend 
+	 * die zu ändernden Felder ab.
 	 * @return Einen mit allen Eigenschaften gefüllten Termin.
+	 * @throws RemoteException 
 	 */
-	private Appointment updateAppointment(){
-		Appointment app = new Appointment();
-		Contact contact = new Contact();
-		Address address = new Address();
+	private void updateAppointment() throws RemoteException{
+		String input = ClientHelper.getInputValue("Bitte geben Sie die ID an: ");
+		UUID id = UUID.fromString(input);
 		
-		contact.setAddress(address);
-		app.setContact(contact);
-		
-		return updateAppointment(app);
+		Appointment app = appointmentService.getAppointment(id);
+		appointmentService.updateAppointment(updateAppointment(app));
+		System.out.println("Termin aktualisiert.");
 	}
 
 	@Override

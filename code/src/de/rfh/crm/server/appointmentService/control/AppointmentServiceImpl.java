@@ -41,7 +41,7 @@ public class AppointmentServiceImpl extends UnicastRemoteObject implements Appoi
 
 	@Override
 	public void updateAppointment(Appointment appointment) throws RemoteException {
-		this.updateAppointment(appointment);
+		this.appointmentServicePersistence.updateAppointment(appointment);
 	}
 
 	@Override

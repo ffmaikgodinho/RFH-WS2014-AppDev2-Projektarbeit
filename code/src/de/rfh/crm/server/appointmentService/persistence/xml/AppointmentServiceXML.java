@@ -11,6 +11,11 @@ import javax.xml.parsers.*;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -20,6 +25,8 @@ import org.xml.sax.SAXException;
 
 import de.rfh.crm.server.appointmentService.boundary.AppointmentServicePersistence;
 import de.rfh.crm.server.appointmentService.entity.Appointment;
+import de.rfh.crm.server.contactService.entity.Address;
+import de.rfh.crm.server.contactService.entity.Contact;
 
 /**
  * This class uses JAXP-API for parsing XML-files.
@@ -30,86 +37,167 @@ public class AppointmentServiceXML implements AppointmentServicePersistence {
 	/**
 	 * Path to local xml file. ToDo: May be stored in a configuration file.
 	 */
-	private File file = new File("C:\\Users\\windo_000\\workspace\\RFH-WS2014-AppDev2-Projektarbeit\\code\\data\\appointments.xml");
+	private final File file = new File("data/appointments.xml");
 	
+	/**
+	 * Findet einen Termin mit der übergebenen ID als Attribut und gibt diesen aus.
+	 */
 	@Override
 	public Appointment getAppointment(UUID id) {
 		Document document = readFile();
-		Element result = findElementWithUuid(id, document);
-	    
+		NodeList results = findElementWithUuid(id, document);
 		Appointment app = new Appointment();
-		app.setId(UUID.fromString(getElementValue(result, "uuid")));
-		app.setSubject(getElementValue(result, "subject"));
 		
-		// Parse Date using a pattern, because Date.parse() is deprecated.
-		try {
-			DateFormat df = new SimpleDateFormat("MM dd kk:mm:ss z yyyy");
-			app.setStartDate(df.parse(getElementValue(result, "startdate")));
-			app.setEndDate(df.parse(getElementValue(result, "enddate")));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		for (int j = 0; j < results.getLength(); j++) {
+			Element el = (org.w3c.dom.Element) results.item(j);
+			
+			app.setId(id);
+			app.setSubject(getElementValue(el, "subject"));
+			
+			// Parse Date using a pattern, because Date.parse() is deprecated.
+			try {
+				DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+				app.setStartDate(df.parse(getElementValue(el, "startDate")));
+				app.setEndDate(df.parse(getElementValue(el, "endDate")));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			Element contactNode = (Element) el.getElementsByTagName("contact").item(0);
+			app.setContact(new Contact());
+			app.getContact().setFirstName(getElementValue(contactNode, "firstName"));
+			app.getContact().setLastName(getElementValue(contactNode, "lastName"));
+			
+			Element addressNode = (Element) contactNode.getElementsByTagName("address").item(0);
+			app.getContact().setAddress(new Address());
+			app.getContact().getAddress().setStreet(getElementValue(addressNode, "street"));
+			app.getContact().getAddress().setZipcode(getElementValue(addressNode, "zipcode"));
+			app.getContact().getAddress().setCity(getElementValue(addressNode, "city"));
+			app.getContact().getAddress().setCountry(getElementValue(addressNode, "country"));
 		}
 		
 		return app;
 	}
 
-	@Override
 	/**
-	 * Entfernt den Node des XML-Dokuments mit der übergebenen ID.
+	 * Entfernt den Termin mit der übergebenen ID aus dem Dokument.
 	 */
+	@Override
 	public void deleteAppointment(UUID id) {
 		Document document = readFile();
-		Element result = findElementWithUuid(id, document);
+		NodeList results = findElementWithUuid(id, document);
 		
-		document.removeChild(result);
+		for (int j = 0; j < results.getLength(); j++) {
+			     Element el = (org.w3c.dom.Element) results.item(j);
+			     document.getDocumentElement().removeChild(el);
+		}
+		
 		saveFile(document);
 	}
-
+	
+	/**
+	 * Creates a xml node appointment with subnode contact and address and adds it to a xml file.
+	 */
 	@Override
 	public void createAppointment(Appointment appointment) {
 		Document document = readFile();
-		Element newAppointment = document.createElement("appointment");
+		Element rootNode = document.getDocumentElement();
 		
-		Node subject = document.createElement("subject");
-		subject.setNodeValue(appointment.getSubject());
-		// or subject.appendChild(document.createTextNode(appointment.getSubject()));
-		newAppointment.appendChild(subject);
+		Element newAppointment = createAppointmentNode(appointment, 
+				document);
 		
-		document.appendChild(newAppointment);
+		rootNode.appendChild(newAppointment);
 		saveFile(document);
 	}
 
+	/**
+	 * Ersetzt den bestehenden Termin mit dem aktualisierten Termin. Die ID bleibt dabei
+	 * identisch.
+	 * @param appointment Der aktualisierte Termin
+	 */
 	@Override
 	public void updateAppointment(Appointment appointment) {
-		// TODO Auto-generated method stub
+		Document document = readFile();
+		NodeList results = findElementWithUuid(appointment.getId(), document);
 		
+		for (int j = 0; j < results.getLength(); j++) {
+			     Element oldAppointment = (org.w3c.dom.Element) results.item(j);
+			     Element newAppointment = createAppointmentNode(appointment, document);
+			     document.getDocumentElement().replaceChild(newAppointment, oldAppointment);
+		}
+		
+		saveFile(document);
+	}
+	
+	/**
+	 * Erstellt einen neuen Node für einen kompletten Termin, der unterhalb des rootNode angesiedelt ist.
+	 * @param appointment Die Inhalte des Termins
+	 * @param document Das Dokument
+	 * @return Den XML Node
+	 */
+	private Element createAppointmentNode(Appointment appointment, Document document) {
+		DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+		
+		Element newAppointment = document.createElement("appointment");
+		newAppointment.setAttribute("UUID", appointment.getId().toString());
+		
+		addElementToNode("subject", appointment.getSubject(), document, newAppointment);
+		addElementToNode("startDate", df.format(appointment.getStartDate()), document, newAppointment);
+		addElementToNode("endDate", df.format(appointment.getEndDate()), document, newAppointment);
+		
+		// create contact node
+		Node contact = document.createElement("contact");
+			
+		addElementToNode("firstName", appointment.getContact().getFirstName(), document, contact);
+		addElementToNode("lastName", appointment.getContact().getLastName(), document, contact);
+		
+		// Create contact subnode address
+		Node address = document.createElement("address");
+		
+		addElementToNode("street", appointment.getContact().getAddress().getStreet(), document, address);
+		addElementToNode("zipcode", appointment.getContact().getAddress().getZipcode(), document, address);
+		addElementToNode("city", appointment.getContact().getAddress().getCity(), document, address);
+		addElementToNode("country", appointment.getContact().getAddress().getCountry(), document, address);
+		
+		contact.appendChild(address);
+		
+		newAppointment.appendChild(contact);
+		return newAppointment;
 	}
 
 	/**
-	 * This method iterated through all nodes of an xml file and search 
-	 * for an element, whose tag "UUID" contains the given uuid value.
+	 * Creates an element with a text value 
+	 * @param tagName The name of the new element
+	 * @param value The text value of the element
+	 * @param document The xml document
+	 * @param parent The parent node, which the element should be appended
+	 */
+ 	private void addElementToNode(String tagName, String value, Document document, Node parent) {
+		Node newNode = document.createElement(tagName);
+		newNode.appendChild(document.createTextNode(value));
+		parent.appendChild(newNode);
+	}
+
+	/**
+	 * This method searches for all appointments with an attribute uuid,
+	 * that matches with the searched uuid.
 	 * @param uuid The searched uuid
 	 * @param document The xml file which should contain the uuid
-	 * @return the full node
+	 * @return a list of all matching nodes
 	 */
-	private Element findElementWithUuid(UUID uuid, Document document) {
-		Element element = null;
-		
-		NodeList allAppointments = document.getChildNodes();
-		int appointmentCount = allAppointments.getLength();
-		
-	    for (int i = 0; i < appointmentCount; i++) {
-	    	Node appointment = allAppointments.item(i);
-	    	if (appointment.getNodeType() == Node.ELEMENT_NODE) {
-	    		element = (Element) appointment;
-	    		String currentId = element.getElementsByTagName("UUID").item(0).getNodeValue();
-	    		if (UUID.fromString(currentId) == uuid) 
-	    			break;
-	    	}
-	    }
-	    
-	    return element;
+	private NodeList findElementWithUuid(UUID uuid, Document document) {
+		XPath xpath = XPathFactory.newInstance().newXPath();
+		Object exprResult = null;
+		try {
+			XPathExpression expr = xpath.compile("//appointment[@UUID=\"" + uuid.toString() + "\"]");
+			exprResult = expr.evaluate(document, XPathConstants.NODESET);
+		} catch (XPathExpressionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		NodeList nodeList = (NodeList) exprResult;
+		return nodeList;
 	}
 
 	/**
@@ -119,9 +207,14 @@ public class AppointmentServiceXML implements AppointmentServicePersistence {
 	 * @return The value of tagName
 	 */
 	private static String getElementValue(Element element, String tagName) {
-		NodeList nodes = element.getElementsByTagName(tagName).item(0).getChildNodes();
-		Node node = (Node) nodes.item(0);
-		return node.getNodeValue();
+		Node nodes = element.getElementsByTagName(tagName).item(0);
+		if (nodes != null) {
+			NodeList childs = nodes.getChildNodes();
+			Node node = (Node) childs.item(0);
+			return node.getNodeValue();
+		} else {
+			return "";
+		}
 	}
 	
 	/**
