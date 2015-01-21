@@ -9,6 +9,7 @@ import de.rfh.crm.server.contactService.boundary.ContactService;
 import de.rfh.crm.server.contactService.boundary.ContactServicePersistence;
 import de.rfh.crm.server.contactService.entity.Contact;
 import de.rfh.crm.server.contactService.persistence.db.ContactServiceDB;
+import de.rfh.crm.server.contactService.persistence.xml.ContactServiceXML;
 
 public class ContactServiceImpl extends UnicastRemoteObject implements ContactService {
 
@@ -18,7 +19,7 @@ public class ContactServiceImpl extends UnicastRemoteObject implements ContactSe
 	
 	public ContactServiceImpl() throws RemoteException {
 		super();
-		this.contactServvicePersistence = new ContactServiceDB();
+		this.contactServvicePersistence = new ContactServiceXML();
 	}
 	@Override
 	public Contact getContact(UUID id) {

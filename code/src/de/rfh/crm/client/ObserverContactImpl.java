@@ -40,7 +40,7 @@ public class ObserverContactImpl extends Observer {
 							}
 							break;
 				case "3" :	Contact contact = contactService.getContact(UUID.fromString(ClientHelper.getInputValue("Bitte geben Sie die ID der Adresse ein, die Sie bearbeiten möchten: ")));
-							contactService.createContact(updateContact(contact));
+							contactService.updateContact(updateContact(contact));
 							System.out.println("Adresse wurde geändert!");
 							break;
 				case "4" :	contactService.deleteContact(UUID.fromString(ClientHelper.getInputValue("Bitte geben Sie die ID der Adresse ein, die Sie löschen möchten: ")));
