@@ -29,7 +29,7 @@ public class ObserverContactImpl extends Observer {
 				
 				switch (choice) {
 				case "0" :  return;
-				case "1" :  contactService.createContact(updateContact());
+				case "1" :  contactService.createContact(createEmptyContact());
 							System.out.println("Adresse wurde gespeichert!");
 							break;
 				case "2" :	ArrayList<Contact> contacts = new ArrayList<Contact>();
@@ -67,7 +67,7 @@ public class ObserverContactImpl extends Observer {
 	 * Erstellt ein Kontaktobjekt anhand der eingegebenen Werte.
 	 * @return Der Kontakt
 	 */
-	private static Contact updateContact(Contact contact) {
+	private Contact updateContact(Contact contact) {
 		
 		contact.setFirstName(ClientHelper.getInputValue("Bitte Vornamen eingeben: "));
 		contact.setLastName(ClientHelper.getInputValue("Bitte Nachnamen eingeben: "));
@@ -79,7 +79,7 @@ public class ObserverContactImpl extends Observer {
 		return contact;
 	}
 	
-	private static Contact updateContact() {
+	private Contact createEmptyContact() {
 		Contact contact = new Contact();
 		Address address = new Address();
 		contact.setAddress(address);
